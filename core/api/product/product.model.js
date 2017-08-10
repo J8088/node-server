@@ -1,21 +1,18 @@
 import mongoose from 'mongoose';
 
-import { ShippingParcel } from "../shipping/shipping";
+import {ShippingParcel} from "../shipping/shipping.model";
+import {registerEvents} from './product.events';
 
 /**
  * VariantMedia Schema
  */
-export const VariantMedia = new mongoose.Schema({
+export const VariantMediaSchema = new mongoose.Schema({
   mediaId: {
     type: String,
     optional: true
   },
   priority: {
     type: Number,
-    optional: true
-  },
-  metafields: {
-    type: [Metafield],
     optional: true
   },
   updatedAt: {
@@ -40,7 +37,7 @@ export const VariantMedia = new mongoose.Schema({
 /**
  * ProductPosition Schema
  */
-export const ProductPosition = new mongoose.Schema({
+export const ProductPositionSchema = new mongoose.Schema({
   tag: {
     type: String,
     optional: true
@@ -68,11 +65,7 @@ export const ProductPosition = new mongoose.Schema({
 /**
  * ProductVariant Schema
  */
-export const ProductVariant = new mongoose.Schema({
-  _id: {
-    type: String,
-    label: "Variant ID"
-  },
+export const ProductVariantSchema = new mongoose.Schema({
   ancestors: {
     type: [String],
     defaultValue: []
@@ -255,10 +248,6 @@ export const ProductVariant = new mongoose.Schema({
     optional: true,
     defaultValue: "Untitled Option"
   },
-  metafields: {
-    type: [Metafield],
-    optional: true
-  },
   createdAt: {
     label: "Created at",
     type: Date,
@@ -275,7 +264,7 @@ export const ProductVariant = new mongoose.Schema({
   }
 });
 
-export const PriceRange = new mongoose.Schema({
+export const PriceRangeSchema = new mongoose.Schema({
   range: {
     type: String,
     defaultValue: "0.00"
@@ -294,22 +283,31 @@ export const PriceRange = new mongoose.Schema({
   }
 });
 
+export const ProductImageSchema = new mongoose.Schema({
+  path: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  originalName: {
+    type: String,
+    required: true
+  }
+});
+
+export const ProductImage = mongoose.model('ProductImage', ProductImageSchema);
+
 /**
  * Product Schema
  */
-export const Product = new mongoose.Schema({
-  _id: {
-    type: String,
-    label: "Product Id"
+const ProductSchema = new mongoose.Schema({
+  images: {
+    type: [ProductImageSchema],
+    defaultValue: []
   },
   ancestors: {
     type: [String],
     defaultValue: []
-  },
-  shopId: {
-    type: String,
-    index: 1,
-    label: "Product ShopId"
   },
   title: {
     type: String,
@@ -337,10 +335,6 @@ export const Product = new mongoose.Schema({
     type: String,
     optional: true
   },
-  metafields: {
-    type: [Metafield],
-    optional: true
-  },
   positions: {
     type: Object, // ProductPosition
     blackbox: true,
@@ -349,7 +343,7 @@ export const Product = new mongoose.Schema({
   // Denormalized field: object with range string, min and max
   price: {
     label: "Price",
-    type: PriceRange
+    type: PriceRangeSchema
   },
   // Denormalized field: Indicates when at least one of variants
   // `inventoryQuantity` are lower then their `lowInventoryWarningThreshold`.
@@ -460,3 +454,6 @@ export const Product = new mongoose.Schema({
     optional: true
   }
 });
+
+registerEvents(ProductSchema);
+export default mongoose.model('Product', ProductSchema);

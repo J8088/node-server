@@ -6,10 +6,37 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
+import Product from '../api/product/product.model';
 import config from './environment/';
 
 export default function seedDatabaseIfNeeded() {
   if(config.seedDB) {
+    Product.find({}).remove()
+      .then(() => {
+      Product.create({
+        ancestors: 'prod ancestors',
+        title: 'prod title',
+        pageTitle: 'prod page title',
+        description: 'prod description',
+        originCountry: 'prod originCountry',
+        type: 'prod type',
+        vendor: 'prod vendor',
+        price: 'prod price'
+      },
+        {
+          ancestors: 'prod ancestors',
+          title: 'prod title',
+          pageTitle: 'prod page title',
+          description: 'prod description',
+          originCountry: 'prod originCountry',
+          type: 'prod type',
+          vendor: 'prod vendor',
+          price: 'prod price'
+        })
+      })
+      .then(() => console.log('finished populating products'))
+      .catch(err => console.log('error populating products', err));
+
     Thing.find({}).remove()
       .then(() => {
         Thing.create({

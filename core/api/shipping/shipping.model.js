@@ -1,5 +1,6 @@
-import { Address } from "../address/address";
-import { Invoice } from "../payment/payments";
+import mongoose from 'mongoose';
+import { Address } from "../address/address.model";
+import { Invoice } from "../payment/payment.model";
 
 /**
  * ShippoShippingMethod Schema
