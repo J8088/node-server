@@ -15,6 +15,12 @@ export default app => {
 
   app.use('/auth', require('./auth').default);
 
+  app.route('/uploads/:fileName')
+    .get((req, res) => {
+      console.log(app.get('appPath'));
+      res.sendFile(path.resolve(`${app.get('appPath')}/uploads/${req.param.fileName}`));
+    });
+
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
