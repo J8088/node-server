@@ -4,5 +4,6 @@ public
 .idea
 dist
 /core/config/local.env.js
+/uploads
 npm-debug.log
 coverage

@@ -7,13 +7,20 @@ import {
   create,
   upsert,
   patch,
-  destroy
+  destroy,
+  storeImageHandler,
+  preStoreImageHandler,
+  postStoreImageHandler,
+  showImagesAll,
+  deleteImages
 } from './product.controller';
-
 
 const router = express.Router();
 
 router.get('/', index);
+router.get('/image', showImagesAll);
+router.post('/image', [preStoreImageHandler, storeImageHandler, postStoreImageHandler]);
+router.delete('/image', deleteImages);
 router.get('/:id', show);
 router.post('/', create);
 router.put('/:id', upsert);

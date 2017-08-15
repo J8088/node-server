@@ -286,12 +286,13 @@ export const PriceRangeSchema = new mongoose.Schema({
 export const ProductImageSchema = new mongoose.Schema({
   path: {
     type: String,
-    required: true,
+    defaultValue: null,
     trim: true
   },
   originalName: {
     type: String,
-    required: true
+    defaultValue: null,
+    trim: true
   }
 });
 
@@ -301,6 +302,10 @@ export const ProductImage = mongoose.model('ProductImage', ProductImageSchema);
  * Product Schema
  */
 const ProductSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
   images: {
     type: [ProductImageSchema],
     defaultValue: []

@@ -12,10 +12,24 @@
 'use strict';
 
 import jsonpatch from 'fast-json-patch';
+import multer  from 'multer';
 import Product, {ProductImage} from './product.model';
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.customUserFileId + '-' + file.originalname);
+  }
+});
+
+const upload = multer({storage: storage}).single('uploadImages');
 
 const respondWithResult = (res, statusCode) => {
   statusCode = statusCode || 200;
+
   return entity => {
     if (entity) {
       return res.status(statusCode).json(entity);
@@ -64,12 +78,42 @@ const handleError = (res, statusCode) => {
   };
 };
 
-const createImage = (path, originalName, cb) => {
-  ProductImage.create({
-    path: path,
-    originalName: originalName
-  })
-    .then(cb(res))
+export const storeImageHandler = upload;
+
+export const preStoreImageHandler = (req, res, next) => {
+  ProductImage.create({})
+    .then((data) => {
+      req['customUserFileId'] = data._id;
+      next();
+    })
+    .catch(handleError(res));
+};
+
+export const postStoreImageHandler = (req, res) => {
+  ProductImage.findById(req.customUserFileId).exec()
+    .then((data) => {
+      data['path'] = req.file.path;
+      data['originalName'] = req.file.originalname;
+      data.save();
+      return data;
+    })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+};
+
+export const showImagesAll = (req, res) => {
+  return ProductImage.find({}).exec()
+    .then((data) => {
+      return data;
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+};
+
+export const deleteImages = (req, res) => {
+  return ProductImage.find({}).remove()
+    .then(respondWithResult(res))
     .catch(handleError(res));
 };
 
@@ -98,6 +142,7 @@ export const upsert = (req, res) => {
   if (req.body._id) {
     delete req.body._id;
   }
+
   return Product.findOneAndUpdate({_id: req.params.id}, req.body, {
     new: true,
     upsert: true,
