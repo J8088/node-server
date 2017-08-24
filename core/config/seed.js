@@ -10,7 +10,7 @@ import Product from '../api/product/product.model';
 import config from './environment/';
 
 export default function seedDatabaseIfNeeded() {
-  if(config.seedDB) {
+  if (config.seedDB) {
     Product.find({}).remove()
       .then(() => {
         Product.create({
@@ -40,8 +40,10 @@ export default function seedDatabaseIfNeeded() {
             vendor: 'prod vendor',
             price: {}
           },
-          (err, data) => {console.log('data ', data);
-            console.log('err ', err);})
+          (err, data) => {
+            console.log('data ', data);
+            console.log('err ', err);
+          })
       })
       .then(() => console.log('finished populating products'))
       .catch(err => console.log('error populating products', err));
@@ -93,6 +95,12 @@ export default function seedDatabaseIfNeeded() {
           name: 'Admin',
           email: 'admin@example.com',
           password: 'admin'
+        }, {
+          'name': 'admin',
+          'email': 'in.lermin@gmail.com',
+          'role': 'admin',
+          'password': 'admin',
+          'provider': 'local'
         })
           .then(() => console.log('finished populating users'))
           .catch(err => console.log('error populating users', err));

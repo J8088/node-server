@@ -1,6 +1,7 @@
 'use strict';
 
 import express from 'express';
+import * as auth from '../../auth/auth.service';
 import {
   index,
   show,
@@ -19,12 +20,12 @@ const router = express.Router();
 
 router.get('/', index);
 router.get('/image', showImagesAll);
-router.post('/image', [preStoreImageHandler, storeImageHandler, postStoreImageHandler]);
-router.delete('/image', deleteImages);
+router.post('/image', auth.hasRole('admin'), [preStoreImageHandler, storeImageHandler, postStoreImageHandler]);
+router.delete('/image', auth.hasRole('admin'), deleteImages);
 router.get('/:id', show);
-router.post('/', create);
-router.put('/:id', upsert);
-router.patch('/:id', patch);
-router.delete('/:id', destroy);
+router.post('/', auth.hasRole('admin'), create);
+router.put('/:id', auth.hasRole('admin'), upsert);
+router.patch('/:id', auth.hasRole('admin'), patch);
+router.delete('/:id', auth.hasRole('admin'), destroy);
 
 module.exports = router;
