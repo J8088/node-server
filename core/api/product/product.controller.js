@@ -130,14 +130,12 @@ export const show = (req, res) => {
     .catch(handleError(res));
 };
 
-// Creates a new Thing in the DB
 export const create = (req, res) => {
   return Product.create(req.body)
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 };
 
-// Upserts the given Thing in the DB at the specified ID
 export const upsert = (req, res) => {
   if (req.body._id) {
     delete req.body._id;

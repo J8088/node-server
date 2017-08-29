@@ -19,6 +19,7 @@ export default function seedDatabaseIfNeeded() {
               originalName: 'img0.jpg'
             }],
             name: 'prod1',
+            categories: [{code: 'cat_no_1', name: 'Category first', description: 'Category first', title: 'First'}],
             ancestors: 'prod ancestors',
             title: 'prod title',
             pageTitle: 'prod page title',
@@ -26,7 +27,7 @@ export default function seedDatabaseIfNeeded() {
             originCountry: 'prod originCountry',
             type: 'prod type',
             vendor: 'prod vendor',
-            price: {}
+            price: {range: '5', min: 1, max: 8}
           },
           {
             images: [],
@@ -38,7 +39,7 @@ export default function seedDatabaseIfNeeded() {
             originCountry: 'prod originCountry',
             type: 'prod type',
             vendor: 'prod vendor',
-            price: {}
+            price: {range: '7', min: 1, max: 8}
           },
           (err, data) => {
             console.log('data ', data);

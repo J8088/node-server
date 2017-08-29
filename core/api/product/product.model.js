@@ -264,6 +264,8 @@ export const ProductVariantSchema = new mongoose.Schema({
   }
 });
 
+
+
 export const PriceRangeSchema = new mongoose.Schema({
   range: {
     type: String,
@@ -298,6 +300,33 @@ export const ProductImageSchema = new mongoose.Schema({
 
 export const ProductImage = mongoose.model('ProductImage', ProductImageSchema);
 
+export const ProductCategorySchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    defaultValue: "",
+    label: "Category Title"
+  },
+  description: {
+    type: String,
+    optional: true
+  },
+  type: {
+    label: "Type",
+    type: String,
+    defaultValue: "simple"
+  }
+});
+
+export const ProductCategory = mongoose.model('ProductCategory', ProductCategorySchema);
+
 /**
  * Product Schema
  */
@@ -305,6 +334,10 @@ const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
+  },
+  categories: {
+    type: [ProductCategorySchema],
+    defaultValue: [{code: 'other', name: 'Other', description: 'Other categories', title: 'Other'}]
   },
   images: {
     type: [ProductImageSchema],
