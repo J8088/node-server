@@ -6,45 +6,96 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
-import Product from '../api/product/product.model';
+import Product, {ProductImage} from '../api/product/product.model';
 import config from './environment/';
 
 export default function seedDatabaseIfNeeded() {
   if (config.seedDB) {
+    ProductImage.find({}).remove()
+      .then(() => {
+        ProductImage.create({
+          path: 'uploads/59a6614a244f3e48ca995fdd-phone1.jpg',
+          originalName: 'phone1.jpg'
+        },{
+          path: 'uploads/59a66169244f3e48ca995fde-phone2.jpg',
+          originalName: 'phone2.jpg'
+        },{
+          path: 'uploads/59a66174244f3e48ca995fdf-phone3.jpg',
+          originalName: 'phone3.jpg'
+        }, (err, data) => {
+          console.log('data ', data);
+          console.log('err ', err);
+        })
+      })
+      .catch(err => console.log('error populating images', err));
+
     Product.find({}).remove()
       .then(() => {
-        Product.create({
-            images: [{
-              path: 'image/path/0.jpg',
-              originalName: 'img0.jpg'
-            }],
-            name: 'prod1',
-            categories: [{code: 'cat_no_1', name: 'Category first', description: 'Category first', title: 'First'}],
-            ancestors: 'prod ancestors',
-            title: 'prod title',
-            pageTitle: 'prod page title',
-            description: 'prod description',
-            originCountry: 'prod originCountry',
-            type: 'prod type',
-            vendor: 'prod vendor',
-            price: {range: '5', min: 1, max: 8}
-          },
-          {
-            images: [],
-            name: 'prod2',
-            ancestors: 'prod ancestors',
-            title: 'prod title',
-            pageTitle: 'prod page title',
-            description: 'prod description',
-            originCountry: 'prod originCountry',
-            type: 'prod type',
-            vendor: 'prod vendor',
-            price: {range: '7', min: 1, max: 8}
-          },
-          (err, data) => {
-            console.log('data ', data);
-            console.log('err ', err);
+
+        ProductImage.find({}).exec()
+          .then((data) => {
+            return data;
           })
+          .then((image) => {
+            Product.create({
+                images: [image[0], image[1]],
+                name: 'prod1',
+                categories: [{code: 'cat_no_1',
+                  value:'1200x500',
+                  name: 'Category first',
+                  description: 'Category first',
+                  title: 'First'}],
+                ancestors: 'prod ancestors',
+                title: 'prod from server title',
+                pageTitle: 'prod page title',
+                description: 'prod description',
+                originCountry: 'prod originCountry',
+                type: 'prod type',
+                vendor: 'prod vendor',
+                price: {range: '5', min: 1, max: 8}
+              },
+              {
+                images: [image[2]],
+                name: 'prod2',
+                ancestors: 'prod ancestors',
+                title: 'prod2 from server title',
+                pageTitle: 'prod from server page title',
+                description: 'prod description',
+                originCountry: 'prod originCountry',
+                type: 'prod type',
+                vendor: 'prod vendor',
+                price: {range: '7', min: 1, max: 8}
+              },
+              {
+                images: [image[1],image[2]],
+                name: 'prod3',
+                ancestors: 'prod ancestors',
+                title: 'prod3 from server title',
+                pageTitle: 'prod3 from server page title',
+                description: 'prod3 description',
+                originCountry: 'prod3 originCountry',
+                type: 'prod type',
+                vendor: 'prod vendor',
+                price: {range: '5', min: 1, max: 5}
+              },
+              {
+                images: [image[2]],
+                name: 'prod2',
+                ancestors: 'prod ancestors',
+                title: 'prod2 from server title',
+                pageTitle: 'prod from server page title',
+                description: 'prod description',
+                originCountry: 'prod originCountry',
+                type: 'prod type',
+                vendor: 'prod vendor',
+                price: {range: '7', min: 1, max: 8}
+              },
+              (err, data) => {
+                console.log('data ', data);
+                console.log('err ', err);
+              })
+          })
+          .catch(err => console.log('error populating images-products', err));
       })
       .then(() => console.log('finished populating products'))
       .catch(err => console.log('error populating products', err));

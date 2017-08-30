@@ -123,6 +123,23 @@ export const index = (req, res) => {
     .catch(handleError(res));
 };
 
+
+export const showFiltered = (req, res) => {
+  // res.json(getProducts(req.query));
+  console.log('req.query',req.query);
+
+
+  //{ '0': '1200x500', '1': '1000x800', '2': '1200x500' }
+
+  return Product.find()
+    .where('categories')
+    .in([])
+    .exec()
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+};
+
 export const show = (req, res) => {
   return Product.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
