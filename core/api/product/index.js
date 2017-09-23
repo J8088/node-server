@@ -14,13 +14,13 @@ import {
   postStoreImageHandler,
   showImagesAll,
   deleteImages,
-  showFiltered
+  showFilteredByCategories
 } from './product.controller';
 
 const router = express.Router();
 
 router.get('/', index);
-router.get('/search', showFiltered);
+router.get('/search', showFilteredByCategories);
 router.get('/image', showImagesAll);
 router.post('/image', [preStoreImageHandler, storeImageHandler, postStoreImageHandler]);
 router.delete('/image', deleteImages);

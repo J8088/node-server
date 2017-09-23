@@ -305,6 +305,10 @@ export const ProductCategorySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  value :{
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -337,7 +341,7 @@ const ProductSchema = new mongoose.Schema({
   },
   categories: {
     type: [ProductCategorySchema],
-    defaultValue: [{code: 'other', name: 'Other', description: 'Other categories', title: 'Other'}]
+    defaultValue: [{code: 'other', value:'other', name: 'Other', description: 'Other categories', title: 'Other'}]
   },
   images: {
     type: [ProductImageSchema],

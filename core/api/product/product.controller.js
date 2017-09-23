@@ -14,6 +14,7 @@
 import jsonpatch from 'fast-json-patch';
 import multer  from 'multer';
 import Product, {ProductImage} from './product.model';
+import R from 'ramda';
 
 
 const storage = multer.diskStorage({
@@ -124,16 +125,25 @@ export const index = (req, res) => {
 };
 
 
-export const showFiltered = (req, res) => {
-  // res.json(getProducts(req.query));
-  console.log('req.query',req.query);
+export const showFilteredByCategories = (req, res) => {
+  let filterObj = {};
+  let filters = R.map((q) => {
+    return req.query[q];
+  }, R.keys(req.query));
 
+  if (filters.length > 0) {
+    filterObj = {
+      $or: [
+        {'categories': {"$elemMatch": {'value': {$in: filters}}}},
+        {'categories': {"$elemMatch": {'name': {$in: filters}}}},
+        {'categories': {"$elemMatch": {'code': {$in: filters}}}},
+        {'categories': {"$elemMatch": {'title': {$in: filters}}}},
+        {'categories': {"$elemMatch": {'description': {$in: filters}}}}
+      ]
+    }
+  }
 
-  //{ '0': '1200x500', '1': '1000x800', '2': '1200x500' }
-
-  return Product.find()
-    .where('categories')
-    .in([])
+  return Product.find(filterObj)
     .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))

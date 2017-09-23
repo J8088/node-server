@@ -57,6 +57,11 @@ export default function seedDatabaseIfNeeded() {
               {
                 images: [image[2]],
                 name: 'prod2',
+                categories: [{code: 'cat_no_2',
+                  value:'1000x800',
+                  name: 'Category sec',
+                  description: 'Category sec',
+                  title: 'First'}],
                 ancestors: 'prod ancestors',
                 title: 'prod2 from server title',
                 pageTitle: 'prod from server page title',

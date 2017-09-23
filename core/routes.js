@@ -30,6 +30,7 @@ export default app => {
 
   // Insert routes below
   app.use('/api/categories', require('./api/category'));
+  app.use('/api/v2/products', require('./api/v2/product'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));

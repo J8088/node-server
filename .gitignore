@@ -1,6 +1,7 @@
 node_modules
 public
 .tmp
+.duty
 .idea
 dist
 /core/config/local.env.js
